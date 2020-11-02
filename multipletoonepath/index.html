@@ -66,8 +66,8 @@ p{
 
   <body style="">
     <header>
-      <h1>Multiple path to one path</h1>
-	  <h3>(for foam cutters)</h3>
+      <h1>Multiple paths to one path</h1>
+	  <h3>(for <a href="https://www.costycnc.it">costycnc </a>foam cutter)</h3>
     </header>
     	
     <article>
@@ -104,23 +104,16 @@ window.onload = function(){
   imageInput.addEventListener("change", function (e) {
     handleFiles(this.files);
   }, false);
-  
-  document.getElementById("run").addEventListener("click", function (e) {
-    Potrace.loadImageFromUrl("yao.jpg");
-    Potrace.process(function(){
-      displayImg();
-      displaySVG(3);
-    });
-  }, false);
+ 
   
   document.getElementById("save").addEventListener("click", function (e) {
-	 e.target.download = "costycnc" + (new Date()).toLocaleTimeString() + ".nc";
+	 e.target.download = "Costycnc_" + (new Date()).toLocaleTimeString() + ".nc";
 	 e.target.href ="data:text/plain;,"+ Potrace.fgcode();
   }, false);  
   
    document.getElementById("save1").addEventListener("click", function (e) {
 	 
-	 e.target.download = "potrace" + (new Date()).toLocaleTimeString() + ".svg";
+	 e.target.download = "Costycnc_" + (new Date()).toLocaleTimeString() + ".svg";
 	 e.target.href = "data:image/svg+xml;," + Potrace.getSVG(1);
 	 
   }, false); 
