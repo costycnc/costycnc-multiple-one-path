@@ -1,0 +1,500 @@
+
+<!-- saved from url=(0028)https://www.costycnc.it/cm5/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="./www.costycnc.it_files/extract.js"></script>
+<script src="./www.costycnc.it_files/potracex.js.download"></script>
+</head>
+<body style="">
+<div><!-- Default Statcounter code for Costycnc.it Svg5  -->
+<script type="text/javascript">
+var sc_project=12354920; 
+var sc_invisible=0; 
+var sc_security="26d560e0"; 
+var scJsHost = "https://";
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script><script type="text/javascript" src="./www.costycnc.it_files/counter.js.download"></script><span class="statcounter"><a id="sc_counter_content" class="statcounter" href="http://www.statcounter.com/" target="_blank"><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAAOAQMAAABJgO2XAAAABlBMVEUAAAD///+l2Z/dAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAARUlEQVQImWNgwA3kbCo+f3/exsBgnHZ2NhvPOQjj+ZlrDAzmeXd3m6UDpazL3t4wyDkGlpoBY8w2AzGA2j8+Pj6/AY8NAGD7HiLyPtlAAAAAAElFTkSuQmCC" alt="StatCounter - Free Web Tracker and Counter" border="0"></a></span>
+
+<noscript><div class="statcounter"><a title="free hit
+counter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12354920/0/26d560e0/0/"
+alt="free hit counter"></a></div></noscript>
+<!-- End of Statcounter Code --></div>
+<div>
+<p> </p><h3 style="color:red">Parametri:$0=128;$1=128;$4=400;$5=800;$8=100</h3><p></p>
+<input type="file" accept=".bmp,.jpg,.gif,.png" onchange="openFile(event)">
+
+<button onclick="saveTextAsFile()">Save gcode</button> 
+
+dpi=<input id="scaledpi" value="96"><br>
+
+<textarea rows="10" cols="22" name="textg" id="gcode" form="usrform1">
+
+</textarea>
+
+
+
+
+<p>
+
+ <input id="myRange" type="range" min=".01" max="25" value="1" step=".01" onchange="display()">
+
+ 
+
+ <input id="myRange1" type="range" min=".01" max="10" value="1" step=".01" onchange="display()">
+
+ 
+
+  insieme x e y <input type="checkbox" id="due" onchange="check()"><br>
+  
+<button onclick="incrx()">+x+</button> <button onclick="decrx()">-x-</button>
+<button onclick="incry()">+y+</button> <button onclick="decry()">-y-</button><br>
+<button onclick="calculeaza()">calculeaza</button> <input type="text" id="calcx"><input type="text" id="calcy"><br>
+<input type="text" id="rangex"><input type="text" id="rangey"></p>
+
+
+
+      <div id="svgdiv"> </div>
+
+
+
+
+
+
+
+<script>
+
+var initialx;
+var initialy;
+
+    
+
+     
+
+    
+
+//-----------------------------------------------------
+
+
+
+  var openFile = function(event) {
+
+ //var scaledpi = document.getElementById('scaledpi').value;
+
+
+
+
+
+    var input = event.target;
+
+
+
+
+
+
+
+    var reader = new FileReader();
+
+
+
+    reader.onload = function(){
+
+
+
+      var dataURL = reader.result;
+
+
+
+      //var output = document.getElementById('output');
+
+
+
+      //output.src = dataURL;
+
+
+
+	   
+
+
+
+
+
+
+
+	  
+
+
+
+    };
+
+
+
+    reader.readAsDataURL(input.files[0]);
+
+
+
+	Potrace.loadImageFromFile(input.files[0]);
+
+	
+
+	//Potrace.loadImageFromUrl("test.png");
+
+	
+
+	
+
+	
+
+   
+
+
+
+	Potrace.process(function(){
+
+
+
+    //displayImg();
+
+
+
+	//-var scale = document.getElementById('scale').value;
+
+
+
+    display(); //solo prima volta
+
+initialx=Potrace.getdimx();
+initialy=Potrace.getdimy();
+
+	//-text1=Potrace.getSVG(scale);
+
+
+
+//text1=Potrace.getSVG();
+
+
+
+	//-myFunction();
+
+
+
+	//-gcode_verify();
+
+
+
+
+
+
+
+	
+
+
+
+  });
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+function display(){
+
+//questa funzie ogni volta quando cambia valore
+
+
+
+var scaledpi = document.getElementById('scaledpi').value;
+
+
+
+rap=(1/scaledpi)*25.4;
+
+
+
+
+
+
+
+var x=document.getElementById("myRange").value;
+
+var y=document.getElementById("myRange1").value;
+
+document.getElementById("rangex").value=x;
+document.getElementById("rangey").value=y;
+
+//----------------------------------------------------------------------my range---------------------------------------------------
+
+if(document.getElementById("due").checked)
+
+{
+
+y=x;
+
+
+
+  document.getElementById("myRange1").disabled = true;
+  document.getElementById("calcy").disabled = true;
+
+}else 
+{
+document.getElementById("myRange1").disabled = false;
+document.getElementById("calcy").disabled = false;
+}
+
+
+
+
+
+
+  var svgdiv = document.getElementById('svgdiv');
+
+
+
+  svgdiv.style.display = 'inline-block';
+
+
+
+  svgdiv.innerHTML = "<p>Result:</p>" + Potrace.getSVG(x/5,y/5);
+
+
+
+
+
+
+
+  var gcode = document.getElementById('gcode');
+
+
+
+  
+
+
+
+  
+
+  //sizex=sizex ://* .264;
+
+//sizey=sizey ;//* .264;
+
+/*
+
+var values = Potrace.getSVG1(x*rap,y*rap);
+
+var first = values.first;
+
+var second = values.second;
+
+gcode.value=first;
+
+*/
+//rap=(1/scaledpi)*2.54;
+  gcode.value = Potrace.getSVG1(x*rap,y*rap);
+    //gcode.value = Potrace.getSVG1(1/96,1/96);
+
+
+
+document.getElementById("calcx").value=Potrace.getdimx();
+
+document.getElementById("calcy").value=Potrace.getdimy();
+
+//alert(second);
+
+
+
+//var slider = document.getElementById("myRange");
+
+
+
+
+
+
+}
+
+function check(){
+
+if(document.getElementById("due").checked)
+
+{
+  document.getElementById("calcy").disabled = true;
+  document.getElementById('myRange1').style.visibility = 'hidden';
+
+}else 
+{
+document.getElementById("myRange1").style.visibility = 'visible';
+document.getElementById("calcy").disabled = false;
+}
+
+}
+
+function calculeaza(){
+
+
+
+var valo=document.getElementById("calcx").value*10;
+var finalx=valo/(initialx*10);
+document.getElementById("myRange").value=finalx;
+
+var valo=document.getElementById("calcy").value*10;
+var finaly=valo/(initialy*10);
+document.getElementById("myRange1").value=finaly;
+display();
+
+}
+function incrx(){
+var x=document.getElementById("myRange").value;
+document.getElementById("myRange").value=parseFloat(x)+0.01;
+display();
+}
+
+function decrx(){
+var x=document.getElementById("myRange").value;
+document.getElementById("myRange").value=parseFloat(x)-0.01;
+display();
+}
+
+function incry(){
+var y=document.getElementById("myRange1").value;
+document.getElementById("myRange1").value=parseFloat(y)+0.01;
+display();
+}
+
+function decry(){
+var y=document.getElementById("myRange1").value;
+document.getElementById("myRange1").value=parseFloat(y)-0.01;
+display();
+}
+
+function saveTextAsFile()
+
+
+
+{ 
+
+
+
+    //var textToSave = document.getElementById("mytext").value;
+
+
+
+    //var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+
+
+
+
+
+
+
+
+
+
+
+    var gcode = document.getElementById('gcode').value;
+
+
+
+
+
+
+
+    var textToSaveAsBlob = new Blob([gcode], {type:"text/plain"});
+
+
+
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+
+
+
+    var fileNameToSaveAs = "costycnc.nc";
+
+
+
+
+
+
+
+    var downloadLink = document.createElement("a");
+
+
+
+    downloadLink.download = fileNameToSaveAs;
+
+
+
+    downloadLink.innerHTML = "Download File";
+
+
+
+    downloadLink.href = textToSaveAsURL;
+
+
+
+    downloadLink.onclick = destroyClickedElement;
+
+
+
+    downloadLink.style.display = "none";
+
+
+
+    document.body.appendChild(downloadLink);
+
+
+
+ 
+
+
+
+    downloadLink.click();
+
+
+
+}
+
+
+
+
+
+
+
+function destroyClickedElement(event)
+
+
+
+{
+
+
+
+    document.body.removeChild(event.target);
+
+
+
+}
+
+
+
+</script>
+
+
+
+
+
+</div>
+
+
+
+
+</body></html>
